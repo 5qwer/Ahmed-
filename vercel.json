@@ -1,0 +1,6 @@
+"routes": [
+  {
+    "src": "/api/(.*)", // This rule says: "ONLY send requests that start with /api/ to my Node.js app."
+    "dest": "api/index.js"
+  }
+],
