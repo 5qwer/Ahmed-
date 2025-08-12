@@ -1,0 +1,324 @@
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تسجيل الحضور والغياب</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>تطبيق طلاب مستر محمود حمد</h1>
+                    <span class="branding">برعاية المصمم أحمد محمد وهبة</span>
+                </div>
+                <div class="header-actions">
+                    <div class="date-display">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="current-date"></span>
+                    </div>
+                    <button class="theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="attendance">
+                <i class="fas fa-check-circle"></i>
+                تسجيل الحضور
+            </button>
+            <button class="nav-tab" data-tab="students">
+                <i class="fas fa-users"></i>
+                إدارة الطلاب
+            </button>
+            <button class="nav-tab" data-tab="reports">
+                <i class="fas fa-chart-line"></i>
+                التقارير
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Attendance Tab -->
+            <div id="attendance-tab" class="tab-content active">
+                <div class="attendance-section">
+                    <div class="scan-area">
+                        <div class="scan-input">
+                            <div class="input-wrapper">
+                                <input type="text" id="student-code" placeholder="أدخل كود الطالب أو امسح الباركود" autofocus>
+                                <div id="student-name-preview" class="student-name-preview"></div>
+                            </div>
+                            <button class="scan-btn" id="scan-btn">
+                                <i class="fas fa-qrcode"></i>
+                                مسح
+                            </button>
+                        </div>
+                        <div class="quick-stats">
+                            <div class="stat-card present">
+                                <i class="fas fa-check"></i>
+                                <div>
+                                    <span class="stat-number" id="present-count">0</span>
+                                    <span class="stat-label">حاضر</span>
+                                </div>
+                            </div>
+                            <div class="stat-card absent">
+                                <i class="fas fa-times"></i>
+                                <div>
+                                    <span class="stat-number" id="absent-count">0</span>
+                                    <span class="stat-label">غائب</span>
+                                </div>
+                            </div>
+                            <div class="stat-card total">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <span class="stat-number" id="total-students">0</span>
+                                    <span class="stat-label">إجمالي</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="attendance-list">
+                        <div class="list-header">
+                            <h3>سجل الحضور اليوم</h3>
+                            <div class="list-actions">
+                                <button class="btn btn-secondary" id="mark-all-absent">
+                                    <i class="fas fa-user-times"></i>
+                                    تسجيل الغياب التلقائي
+                                </button>
+                                <button class="btn btn-primary" id="export-daily">
+                                    <i class="fas fa-download"></i>
+                                    تصدير اليوم
+                                </button>
+                            </div>
+                        </div>
+                        <div class="attendance-records" id="attendance-records">
+                            <!-- Attendance records will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Tab -->
+            <div id="students-tab" class="tab-content">
+                <div class="students-section">
+                    <div class="students-header">
+                        <h2>إدارة الطلاب</h2>
+                        <div class="students-actions">
+                            <button class="btn btn-primary" id="add-student-btn">
+                                <i class="fas fa-plus"></i>
+                                إضافة طالب
+                            </button>
+                            <button class="btn btn-secondary" id="import-students-btn">
+                                <i class="fas fa-upload"></i>
+                                استيراد ملف
+                            </button>
+                            <button class="btn btn-success" id="manual-entry-btn">
+                                <i class="fas fa-table"></i>
+                                إدخال جدول
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="search-bar">
+                        <input type="text" id="search-students" placeholder="البحث عن طالب...">
+                        <i class="fas fa-search"></i>
+                    </div>
+
+                    <div class="students-list" id="students-list">
+                        <!-- Students list will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports-tab" class="tab-content">
+                <div class="reports-section">
+                    <h2>التقارير والإحصائيات</h2>
+                    
+                    <div class="report-filters">
+                        <div class="filter-group">
+                            <label>من تاريخ:</label>
+                            <input type="date" id="date-from">
+                        </div>
+                        <div class="filter-group">
+                            <label>إلى تاريخ:</label>
+                            <input type="date" id="date-to">
+                        </div>
+                        <button class="btn btn-primary" id="generate-report">
+                            <i class="fas fa-chart-bar"></i>
+                            إنشاء التقرير
+                        </button>
+                    </div>
+
+                    <div class="report-results" id="report-results">
+                        <div class="report-summary">
+                            <div class="summary-card">
+                                <h4>معدل الحضور العام</h4>
+                                <div class="percentage" id="overall-attendance">0%</div>
+                            </div>
+                            <div class="summary-card">
+                                <h4>أيام الدراسة</h4>
+                                <div class="count" id="school-days">0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="report-chart">
+                            <canvas id="attendance-chart"></canvas>
+                        </div>
+
+                        <div class="detailed-report" id="detailed-report">
+                            <!-- Detailed student reports will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="add-student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة طالب جديد</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>اسم الطالب:</label>
+                    <input type="text" id="new-student-name" placeholder="أدخل اسم الطالب">
+                </div>
+                <div class="form-group">
+                    <label>كود الطالب:</label>
+                    <input type="text" id="new-student-code" placeholder="أدخل كود الطالب">
+                    <button class="btn btn-secondary" id="generate-code">
+                        <i class="fas fa-random"></i>
+                        إنشاء كود تلقائي
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label>الصف:</label>
+                    <input type="text" id="new-student-class" placeholder="مثال: الصف الأول">
+                </div>
+                <div class="form-group">
+                    <label>المجموعة:</label>
+                    <input type="text" id="new-student-group" placeholder="مثال: مجموعة السبت صباحاً">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-add">إلغاء</button>
+                <button class="btn btn-primary" id="confirm-add">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Entry Modal -->
+    <div id="manual-entry-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>إدخال بيانات الطلاب يدوياً</h3>
+                <span class="close manual-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="manual-entry-info">
+                    <p>أدخل بيانات الطلاب في الجدول أدناه. يمكنك نسخ البيانات من Excel أو أي جدول آخر ولصقها هنا.</p>
+                </div>
+                
+                <!-- Add bulk text input area -->
+                <div class="bulk-input-section">
+                    <h4>أو الصق قائمة الطلاب هنا:</h4>
+                    <textarea id="bulk-student-input" placeholder="الصق قائمة الطلاب هنا مثل:
+٢ بدرهانی سمیر
+٣ لؤي محمد سيد  
+٤ حبيبة محمد حسن
+٦ منة الله أحمد شعبان
+٧ ريم فرج صلاح عبد العليم
+
+أو:
+2 أحمد محمد علي
+3 فاطمة محمد حسن
+4 محمد صالح أحمد
+
+سيتم إنشاء الأكواد تلقائياً بناءً على الأرقام"></textarea>
+                    <div class="bulk-input-actions">
+                        <button class="btn btn-primary" id="parse-bulk-input">
+                            <i class="fas fa-magic"></i>
+                            تحليل وإضافة للجدول
+                        </button>
+                        <button class="btn btn-secondary" id="clear-bulk-input">
+                            <i class="fas fa-eraser"></i>
+                            مسح النص
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-controls">
+                    <button class="btn btn-secondary btn-small" id="add-row">
+                        <i class="fas fa-plus"></i>
+                        إضافة صف
+                    </button>
+                    <button class="btn btn-secondary btn-small" id="clear-table">
+                        <i class="fas fa-trash"></i>
+                        مسح الجدول
+                    </button>
+                    <button class="btn btn-success btn-small" id="auto-generate-codes">
+                        <i class="fas fa-magic"></i>
+                        إنشاء أكواد تلقائي
+                    </button>
+                </div>
+
+                <div class="manual-entry-table">
+                    <table id="students-entry-table">
+                        <thead>
+                            <tr>
+                                <th>اسم الطالب</th>
+                                <th>كود الطالب</th>
+                                <th>الصف</th>
+                                <th>المجموعة</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entry-table-body">
+                            <!-- Rows will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-manual-entry">إلغاء</button>
+                <button class="btn btn-primary" id="save-manual-entries">
+                    <i class="fas fa-save"></i>
+                    حفظ البيانات
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "chart.js": "https://esm.sh/chart.js@4.4.0"
+        }
+    }
+    </script>
+    <script src="app.js" type="module"></script>
+</body>
+</html>
